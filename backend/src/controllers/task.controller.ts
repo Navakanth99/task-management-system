@@ -106,7 +106,11 @@ export const getTaskById = async (
       return;
     }
 
-    const task = await getTaskByIdService(req.params.id, req.user.userId);
+    const taskId = Array.isArray(req.params.id)
+      ? req.params.id[0]
+      : req.params.id;
+
+    const task = await getTaskByIdService(taskId, req.user.userId);
 
     res.status(200).json({
       success: true,
@@ -135,12 +139,11 @@ export const updateTask = async (
       });
       return;
     }
+    const taskId = Array.isArray(req.params.id)
+      ? req.params.id[0]
+      : req.params.id;
 
-    const task = await updateTaskService(
-      req.params.id,
-      req.user.userId,
-      req.body,
-    );
+    const task = await updateTaskService(taskId, req.user.userId, req.body);
 
     res.status(200).json({
       success: true,
@@ -170,8 +173,10 @@ export const deleteTask = async (
       });
       return;
     }
-
-    await deleteTaskService(req.params.id, req.user.userId);
+    const taskId = Array.isArray(req.params.id)
+      ? req.params.id[0]
+      : req.params.id;
+    await deleteTaskService(taskId, req.user.userId);
 
     res.status(200).json({
       success: true,
